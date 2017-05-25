@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Survey Form</title>
+        <title><%= title %></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="../styles/index.css">
@@ -18,11 +18,11 @@
             <form action="/submit" method="post">
                 <div>
                 Your Name:
-                <input type="textbox">
+                <input type="textbox" name='name'>
                 </div>
                 <div>
                     Dojo Location:
-                    <select id="dojo" name="Dojo">
+                    <select id="dojo" name="dojo">
                         <option value="Mountain View">Mountain View</option>
                         <option value="Northwestern Mutual">Northwestern Mutual</option>
                         <option value="Seattle">Seattle</option>
@@ -31,7 +31,7 @@
                 </div>
                 <div>
                     Favorite Language:
-                    <select id="dojo" name="Language">
+                    <select id="dojo" name="language">
                         <option value="Javascript">Javascript</option>
                         <option value="Python">Python</option>
                         <option value="C++">C++</option>
