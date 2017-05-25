@@ -21,10 +21,6 @@ app.get('/', function (req, res) {
 })
 
 app.post('/submit', function (req, res) {
-    const infoFromForm = req.body;
-
-
-
     res.render('submittedinfo', req.body);
 })
 
