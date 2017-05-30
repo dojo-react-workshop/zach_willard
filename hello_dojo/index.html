@@ -20,10 +20,17 @@
         </div>
         <script>
             let container = document.getElementById("target");
+            let itemArr = [ "Learn React", "Climb Mt. Everest", "Run a Marathon", "Feed the dogs" ];            ]
 
             const listItem = (props) => {
                 const { item } = props;
                 return React.createElement('li', null, item);
+            }
+
+            const list = (props) => {
+                const { list } = props
+                
+                return React.createElement('li', null, 
             }
 
             
