@@ -19,31 +19,31 @@
                 {
                     id: 0,
                     name: 'React',
-                    VoteCount: 15
+                    voteCount: 15
                 },
                 {
                     id: 2,
                     name: 'Angular',
-                    VoteCount: 9
+                    voteCount: 9
                 },
                 {
                     id: 1,
                     name: 'Vue',
-                    VoteCount: 12
+                    voteCount: 12
                 },
                 {
                     id: 3,
                     name: 'Ember',
-                    VoteCount: 4
+                    voteCount: 4
                 }
             ]
 
 
             const voteCompare = (a, b) => {
-                if (a.VoteCount < b.VoteCount){
+                if (a.voteCount < b.voteCount){
                     return 1;
                 }
-                if (a.VoteCount > b.VoteCount){
+                if (a.voteCount > b.voteCount){
                     return -1;
                 }
                 return 0;
@@ -52,20 +52,20 @@
             const root = document.getElementById('root');
             
             const Votes = (props) => {
-                const { id, VoteCount } = props;
+                const { id, voteCount } = props;
                 const style = {
                     width: '40px',
                     height: '40px',
                     lineHeight: '40px',
                     textAlign: 'center',
                     border: 'thin solid red',
-                    boxShadow: '5px 3px 5px #888888',
+                    boxShadow: '5px 3px 5px #999999',
                     borderRadius: '20px'
                 }
 
                 return (
                     <div key={id} style={style}>
-                        {VoteCount}
+                        {voteCount}
                     </div>
                 );
             }
@@ -102,7 +102,7 @@
             }
 
             const ListItem = (props) => {
-                const {id, name, VoteCount} = props;
+                const {id, name, voteCount} = props;
                 const style = {
                     display: 'flex',
                     justifyContent: 'space-around',
@@ -110,11 +110,11 @@
                     margin: '10px 0 10px 0',
                     border: 'thin grey solid',
                     height: '60px',
-                    boxShadow: '10px 5px 5px #888888'
+                    boxShadow: '10px 5px 5px #999999'
                 }
                 return (
                     <li key={id} style={style}>
-                        <Votes id={id} VoteCount={VoteCount}/> <Name name={name}/> <Iterator/>
+                        <Votes id={id} voteCount={voteCount}/> <Name name={name}/> <Iterator/>
                     </li>
                 );
             }
@@ -123,7 +123,7 @@
                 <div>
                     <h1 style={ {textAlign:'center'} }>Vote Your JS Library!</h1>
                     <ul style={ {listStyle:'none', width: '400px', margin: 'auto auto', padding: '0px'} }>
-                        {data.sort(voteCompare).map((id, name, VoteCount) => ListItem(id, name, VoteCount))}
+                        {data.sort(voteCompare).map((id, name, voteCount) => ListItem(id, name, voteCount))}
                     </ul>
                 </div>,
                 root
