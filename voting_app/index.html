@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+                <script src="node_modules/react/dist/react.js"></script>
+        <script src="node_modules/react-dom/dist/react-dom.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    </head>
+    <body>
+        <div id="root">
+        </div>
+        <script type="text/babel">
+            'use strict';
+
+            let data = [
+                {
+                    id: 0,
+                    name: 'React',
+                    VoteCount: 15
+                },
+                {
+                    id: 2,
+                    name: 'Angular',
+                    VoteCount: 9
+                },
+                {
+                    id: 1,
+                    name: 'Vue',
+                    VoteCount: 12
+                },
+                {
+                    id: 3,
+                    name: 'Ember',
+                    VoteCount: 4
+                }
+            ]
+
+
+            const voteCompare = (a, b) => {
+                if (a.VoteCount < b.VoteCount){
+                    return 1;
+                }
+                if (a.VoteCount > b.VoteCount){
+                    return -1;
+                }
+                return 0;
+            }
+
+            const root = document.getElementById('root');
+            
+            const Votes = (props) => {
+                const { id, VoteCount } = props;
+                const style = {
+                    width: '40px',
+                    height: '40px',
+                    lineHeight: '40px',
+                    textAlign: 'center',
+                    border: 'thin solid grey',
+                    borderRadius: '20px'
+                }
+
+                return (
+                    <div key={id} style={style}>
+                        {VoteCount}
+                    </div>
+                );
+            }
+
+            const Iterator = (props) => {
+
+                const style = {
+                    position: 'relative',
+                    top: '-3px',
+                    color: 'green',
+                    fontSize: '45px',
+                    width: '17px'
+                }
+
+                return (
+                    <div style={style}>+</div>
+                );
+            }
+
+            const Name = (props) => {
+                const { name } = props;
+
+                const style = {
+                    fontSize: '20px',
+                    width: '200px',
+                    textAlign: 'center'
+                }
+
+                return (
+                    <div style={style}>
+                        {name}
+                    </div>
+                );
+            }
+
+            const ListItem = (props) => {
+                const {id, name, VoteCount} = props;
+                const style = {
+                    display: 'flex',
+                    justifyContent: 'space-around',
+                    alignItems: 'center',
+                    margin: '5px 0 5px 0',
+                    border: 'thin grey solid',
+                    height: '60px'
+                }
+                return (
+                    <li key={id} style={style}>
+                        <Votes id={id} VoteCount={VoteCount}/> <Name name={name}/> <Iterator/>
+                    </li>
+                );
+            }
+
+            ReactDOM.render(
+                <div>
+                    <h1 style={ {textAlign:'center'} }>Vote Your JS Library!</h1>
+                    <ul style={ {listStyle:'none', width: '400px', margin: 'auto auto', padding: '0px'} }>
+                        {data.sort(voteCompare).map((id, name, VoteCount) => ListItem(id, name, VoteCount))}
+                    </ul>
+                </div>,
+                root
+            );
+        </script>
+    </body>
+</html>
