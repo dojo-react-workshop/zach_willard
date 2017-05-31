@@ -72,16 +72,21 @@
 
             const Iterator = (props) => {
 
+                const handleClick = () => {
+                    alert('You clicked me!');
+                }
+
                 const style = {
                     position: 'relative',
                     top: '-3px',
                     color: 'green',
                     fontSize: '45px',
-                    width: '17px'
+                    width: '17px',
+                    cursor: 'pointer'
                 }
 
                 return (
-                    <div style={style}>+</div>
+                    <div style={style} onClick={handleClick}>+</div>
                 );
             }
 
