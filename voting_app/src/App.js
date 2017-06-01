@@ -46,7 +46,7 @@ class App extends Component {
 	}
 
 	addVote = (id) => {
-		let newVoteData = this.state.data;
+		let newVoteData = Array.from(this.state.data);
 		// console.log(id);
 		// console.log(newVoteData[id].voteCount);
 		newVoteData[id].voteCount++;
@@ -164,7 +164,7 @@ class ListItem extends Component {
 	render() {
 		return (
 			<li style={this.style}>
-				<this.Votes voteCount={this.state.voteCount}/> <this.Name name={this.state.name}/> <this.Iterator addVote={this.state.addVote} id={this.state.id}/>
+				<this.Votes voteCount={this.props.voteCount}/> <this.Name name={this.props.name}/> <this.Iterator addVote={this.props.addVote} id={this.props.id}/>
 			</li>
 		);
 	}
