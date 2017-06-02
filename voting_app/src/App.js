@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
+import PropTypes from 'prop-types';
 
 
 class App extends Component {
-	constructor(props){
-		super(props);
+	constructor(){
+		super();
 
 		this.state = {
 			data: [
@@ -47,14 +47,8 @@ class App extends Component {
 
 	addVote = (id) => {
 		let newVoteData = Array.from(this.state.data);
-		// console.log(id);
-		// console.log(newVoteData[id].voteCount);
 		newVoteData[id].voteCount++;
-		// console.log(newVoteData[id].voteCount);
-		console.log(newVoteData);
-		
 		this.setState({ data: newVoteData });
-		console.log(this.state.data);
 	}
             
 	render() {
@@ -65,10 +59,10 @@ class App extends Component {
 					{
 						this.state.data
 							.sort(this.voteCompare)
-							.map((votingObj) => {
+							.map((votingObj, idx) => {
 								return <ListItem
 											key={votingObj.id}
-											id={votingObj.id}
+											id={idx}
 											name={votingObj.name}
 											voteCount={votingObj.voteCount}
 											addVote={this.addVote}/>
@@ -81,93 +75,99 @@ class App extends Component {
 	}
 }
 
-class ListItem extends Component { 
-	constructor(props){
-		super(props);
-		
-		this.state = {
-			id: props.id,
-			name: props.name,
-			voteCount: props.voteCount,
-			addVote: props.addVote
-		}
-
-		this.style = {
-			display: 'flex',
-			justifyContent: 'space-around',
-			alignItems: 'center',
-			margin: '10px 0 10px 0',
-			border: 'thin grey solid',
-			height: '60px',
-			boxShadow: '10px 5px 5px #999999'
-		}
+const Iterator = (props) => {
+	const { addVote, id } = props;
+	const style = {
+		position: 'relative',
+		top: '-3px',
+		color: 'green',
+		fontSize: '45px',
+		width: '17px',
+		cursor: 'pointer'
 	}
 
-
-	Iterator = (props) => {
-		const { addVote, id } = props;
-		const style = {
-			position: 'relative',
-			top: '-3px',
-			color: 'green',
-			fontSize: '45px',
-			width: '17px',
-			cursor: 'pointer'
-		}
-
-		const runAddVote = () => {
-			addVote(id);
-		}
-
-		return (
-			<div style={style} onClick={runAddVote}>+</div>
-		);
+	const runAddVote = () => {
+		addVote(id);
 	}
 
-	Votes = (props) => {
-	    const { voteCount } = props;
-	    const style = {
-	        width: '40px',
-	        height: '40px',
-	        lineHeight: '40px',
-	        textAlign: 'center',
-	        border: 'thin solid red',
-	        boxShadow: '5px 3px 5px #999999',
-	        borderRadius: '20px'
-	    }
+	return (
+		<div style={style} onClick={runAddVote}>+</div>
+	);
+}
 
-		return (
-			<div style={style}>
-				{voteCount}
-			</div>
-		);
+Iterator.propTypes = {
+	addVote: PropTypes.func.isRequired,
+	id: PropTypes.number.isRequired
+}
+
+const Votes = (props) => {
+	const { voteCount } = props;
+	const style = {
+		width: '40px',
+		height: '40px',
+		lineHeight: '40px',
+		textAlign: 'center',
+		border: 'thin solid red',
+		boxShadow: '5px 3px 5px #999999',
+		borderRadius: '20px'
 	}
 
+	return (
+		<div style={style}>
+			{voteCount}
+		</div>
+	);
+}
+
+Votes.propTypes = {
+	voteCount: PropTypes.number.isRequired
+}
 
 
-	Name = (props) => {
-		const { name } = props;
+const Name = (props) => {
+	const { name } = props;
 
-		const style = {
-			fontSize: '20px',
-			width: '200px',
-			textAlign: 'center'
-		}
-
-		return (
-			<div style={style}>
-				{name}
-			</div>
-		);
+	const style = {
+		fontSize: '20px',
+		width: '200px',
+		textAlign: 'center'
 	}
 
-	render() {
-		return (
-			<li style={this.style}>
-				<this.Votes voteCount={this.props.voteCount}/> <this.Name name={this.props.name}/> <this.Iterator addVote={this.props.addVote} id={this.props.id}/>
-			</li>
-		);
+	return (
+		<div style={style}>
+			{name}
+		</div>
+	);
+}
+
+Name.propTypes = {
+	name: PropTypes.string.isRequired
+}
+
+const ListItem = (props) => { 
+
+	this.style = {
+		display: 'flex',
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		margin: '10px 0 10px 0',
+		border: 'thin grey solid',
+		height: '60px',
+		boxShadow: '10px 5px 5px #999999'
 	}
+
+	return (
+		<li style={this.style}>
+			<Votes voteCount={props.voteCount}/> <Name name={props.name}/> <Iterator addVote={props.addVote} id={props.id}/>
+		</li>
+	);
+}
+
+ListItem.propTypes = {
+	voteCount: PropTypes.number.isRequired,
+	name: PropTypes.string.isRequired,
+	addVote: PropTypes.func.isRequired,
+	id: PropTypes.number.isRequired
 }
 
 export default App;
