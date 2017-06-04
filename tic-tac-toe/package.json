@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "deep-copy": "^1.2.0",
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-addons-update": "^15.5.2",

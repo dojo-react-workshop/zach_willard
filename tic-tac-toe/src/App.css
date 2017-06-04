@@ -15,3 +15,30 @@
 .NextTurn {
   font-size: 30px;
 }
+
+.Moves {
+  /*list-style-type: decimal;*/
+  display: inline-block;
+  width: 100px;
+}
+
+.Moves > li {
+  text-align: left;
+}
+
+.Board {
+  width: 306px;
+  margin: 40px;
+  display: inline-block;
+}
+
+button {
+     background:none!important;
+     color: #0645AD;
+     border:none; 
+     padding:0!important;
+     font: inherit;
+     /*border is optional*/
+     border-bottom:1px solid #0645AD; 
+     cursor: pointer;
+}

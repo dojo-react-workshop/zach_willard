@@ -1,96 +1,121 @@
-import React, { Component } from 'react';
-// import logo from './logo.svg';
+import React, {
+  Component
+} from 'react';
 import './App.css';
-
-
-  const arrayClone = (arr) => {
-    var i, copy;
-    if (Array.isArray(arr)){
-      copy = arr.slice( 0 );
-      for( i = 0; i < copy.length; i++ ) {
-          copy[ i ] = arrayClone( copy[ i ] );
-      }
-      return copy;
-    } else {
-      return arr;
-    }
-  }
+import dcopy from 'deep-copy';
 
 class App extends Component {
-  state = {
-    //null = unclaimed, X = X, O = O
-    board: [[null,null,null],[null,null,null],[null,null,null]],
-    winningBoards: [
-            [[1,1,1],[null,null,null],[null,null,null]],
-            [[null,null,null],[1,1,1],[null,null,null]],
-            [[null,null,null],[null,null,null],[1,1,1]],
-            [[1,null,null],[1,null,null],[1,null,null]],
-            [[null,1,null],[null,1,null],[null,1,null]],
-            [[null,null,1],[null,null,1],[null,null,1]],
-            [[1,null,null],[null,1,null],[null,null,1]],
-            [[null,null,1],[null,1,null],[1,null,null]]
-            ],
-    turn: "X",
-    winner: null
-  }
-  
+	constructor(){
+		super();
+		let board = [
+			[null, null, null],
+			[null, null, null],
+			[null, null, null]
+			];
+		let turn = "X"
+	this.state = {
+			//null = unclaimed, X = X, O = O
+			board,
+			turn,
+			winner: null,
+			hist: [{board, turn}]
+		}
+	}
+
   ticTac = (row, col) => {
-    if (!this.state.win) {
-      let tempBoard = arrayClone(this.state.board);
+    if (!this.state.winner) {
+      let tempBoard = dcopy(this.state.board);
       tempBoard[row][col] = this.state.turn;
-      this.setState( { board: tempBoard });
-      this.checkWin();
-      (this.state.turn === "X") ? this.setState( { turn: "O" } ) : this.setState( { turn: "X" } )
+      this.setState({
+        board: tempBoard
+      }, () => {
+		//check for winner
+        this.checkWin();
+		// switch turn to the next player
+        (this.state.turn === "X") ? 
+			this.setState({ turn: "O" }, () => {this.saveBoard()}): 
+			this.setState({ turn: "X" }, () => {this.saveBoard()});
+      });
+
     }
+  }
+
+  saveBoard = () => {
+	let hist = dcopy(this.state.hist);
+	hist.push({ turn: this.state.turn, board: this.state.board });
+	this.setState({ hist });
   }
 
   checkWin = () => {
-    let tempBoard = arrayClone(this.state.board);
-    console.log("state:" + this.state.board);
-    for (var i = 0; i < tempBoard.length; i++){
-      for (var j = 0; j < tempBoard[i].length; j++){
-        console.log("checking for " + this.state.turn)
-        console.log(tempBoard);
-        if (tempBoard[i][j] === this.state.turn) {
-          tempBoard[i][j] = 1;
-        } else {
-          tempBoard[i][j] = null;
+    var turn = this.state.turn;
+
+    //row
+    let verticalCount = [0, 0, 0];
+    let leftDiagonalCount = 0;
+    let rightDiagonalCount = 0;
+	let fullCount = 0;
+    for (let i = 0; i < this.state.board.length; i++) {
+      //col
+      let horizontalCount = 0;
+      for (let j = 0; j < this.state.board[i].length; j++) {
+        if (this.state.board[i][j] === turn) {
+          horizontalCount++;
+          verticalCount[j]++;
+          if (i - j === 0) {
+            leftDiagonalCount++;
+          }
+          if (i - j === 2 || i - j === -2 || (i === 1 && j === 1)) {
+            rightDiagonalCount++;
+          }
         }
+		if (this.state.board[i][j]){
+			fullCount++;
+		}
+      }
+      //Check for horizontal or diagonal wins
+      if (horizontalCount === 3 || leftDiagonalCount >= 3 || rightDiagonalCount >= 3) {
+        this.setState({ winner: turn })
+        return
       }
     }
-    
-    console.log(tempBoard);
+    //check for the vertical win
+    verticalCount.forEach((count) => {
+      if (count === 3) {
+        this.setState({ winner: turn })
+      }
+    });
+	if (fullCount === 9) {
+		this.setState({ winner: "stalemate" })
+	}
   }
 
-    // X X X
-    //
-    // or
-    //
-    // X O X
-    // O X O
-    // X O X
-    //
-    // or 
-    // 
-    // X
-    // X
-    // X
-
-    // for (var i = 0; i < arr.length; i++){
-    //   if (this.state.board[0][i] == "X" {
-    //   })
-    // }
-    // [['filled'],['filled'],['filled']]
-
-  render() {
-    return (
-      <div className="App">
-        <NextTurn turn={this.state.turn} winner={this.state.winner} />
-        <GameBoard board={this.state.board} ticTac={this.ticTac}/>
-        {/*  <Moves/>*/}
-      </div>
-    );
+  rewindGame = (move) => {
+	this.setState({ 
+		winner: null, 
+		board: this.state.hist[move].board,
+		turn: this.state.hist[move].turn },
+		() => {
+			let hist = dcopy(this.state.hist);
+			for (let i = hist.length - 1; i > move; i--){
+				hist.pop();
+			}
+			this.setState({ hist });
+		}
+	);
+	
   }
+
+	render() {
+		return (
+			<div className="App">
+				<div className="Board">
+					<GameBoard board={this.state.board} ticTac={this.ticTac}/>
+					<NextTurn turn={this.state.turn} winner={this.state.winner} />
+				</div>
+				<Moves move={this.state.hist.length} rewindGame={this.rewindGame} key={this.state.hist.length}/>
+			</div>
+		);
+	}
 }
 
 
@@ -140,13 +165,37 @@ const NextTurn = (props) => {
   let { turn, winner } = props;
   
   let display = "";
-  (winner) ? display = `${winner} has won the game!` : display = `It is "${turn}'s" turn`
+  if (winner === "stalemate"){
+	display = `This game is a ${winner}.`;
+  } else {
+	(winner) ? display = `${winner} has won the game!` : display = `It is "${turn}'s" turn`
+  }  
 
   return (<div className="NextTurn">{display}</div>);
 }
 
-// const Moves = () => {
-//   return null;
-// }
+const Moves = (props) => {
+	let { move, rewindGame } = props;
+  
+	let display = [];
+
+	const callRewindGame = (moveBack) => {
+		rewindGame(moveBack);
+	}
+
+	for ( let i = 0; i < move; i++ ){
+		if (i === 0){
+			display.push(<li key={i}><button onClick={() => callRewindGame(i)} data={i}>Game Start</button></li>)
+		} else {
+			display.push(<li key={i}><button onClick={() => callRewindGame(i)} data={i}>Move #{i}</button></li>);
+		}
+	}
+
+	return (
+		<ol className="Moves">
+			{display}
+		</ol>
+		);
+}
 
 export default App;
