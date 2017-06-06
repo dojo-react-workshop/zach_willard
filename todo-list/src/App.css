@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  padding-top: 100px;
 }
 
 .App-logo {
@@ -21,4 +22,27 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.Todo {
+  display: flex;
+}
+
+.Checkcircle {
+  border: grey thin solid;
+  border-radius: 50px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  margin-right: 30px;
+}
+
+.todoname {
+  line-height: 30px;
+  height: 30px;
+}
+
+.crossed {
+  text-decoration: line-through;
+  color: #DDDDDD
 }

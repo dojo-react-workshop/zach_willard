@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="App row"
+>
+  <h1
+    className="columns small-8 medium-6 large-4 xlarge-4 small-centered"
+  >
+    Todos
+  </h1>
+  <div
+    className="columns small-8 medium-6 large-4 xlarge-4 small-centered card"
+  >
+    <a>
+      <span
+        className="icon icon-caret-down"
+      />
+    </a>
+    <form
+      onSubmit={[Function]}
+    >
+      <input
+        onChange={[Function]}
+        placeholder="What needs to be done?"
+        type="text"
+        value=""
+      />
+    </form>
+  </div>
+  <div
+    className="columns small-8 medium-6 large-4 xlarge-4 small-centered card"
+  >
+    Bottom bar
+  </div>
+</div>
+`;
