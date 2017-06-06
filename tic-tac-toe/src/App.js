@@ -53,7 +53,7 @@ class App extends Component {
     let verticalCount = [0, 0, 0];
     let leftDiagonalCount = 0;
     let rightDiagonalCount = 0;
-	let fullCount = 0;
+	  let fullCount = 0;
     for (let i = 0; i < this.state.board.length; i++) {
       //col
       let horizontalCount = 0;
@@ -84,9 +84,9 @@ class App extends Component {
         this.setState({ winner: turn })
       }
     });
-	if (fullCount === 9) {
-		this.setState({ winner: "stalemate" })
-	}
+    if (fullCount === 9) {
+      this.setState({ winner: "stalemate" })
+    }
   }
 
   rewindGame = (move) => {
@@ -132,7 +132,7 @@ const GameBoard = (props) => {
         );
 }
 
-// "mark" = the X, O or 0 data contained in our arrays
+// "mark" = the X, O or null data contained in our arrays
 const Row = (props) => {
   return (
     <div>
