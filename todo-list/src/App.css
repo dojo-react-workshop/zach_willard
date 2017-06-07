@@ -46,3 +46,25 @@
   text-decoration: line-through;
   color: #DDDDDD
 }
+
+.BottomMenu {
+  display: flex;
+  justify-content: space-between;
+}
+
+.BottomMenu > h4 {
+  line-height: 40px;
+}
+
+.AddTodo {
+  display: flex;
+  justify-content: space-between;
+}
+
+.AddTodo > form {
+  flex-basis: 95%;
+}
+
+.AddTodo > a {
+  line-height: 50px;
+}

@@ -15,6 +15,7 @@ exports[`renders correctly 1`] = `
     <a>
       <span
         className="icon icon-caret-down"
+        onClick={[Function]}
       />
     </a>
     <form
@@ -29,9 +30,37 @@ exports[`renders correctly 1`] = `
     </form>
   </div>
   <div
-    className="columns small-8 medium-6 large-4 xlarge-4 small-centered card"
+    className="columns small-8 medium-6 large-4 xlarge-4 small-centered card BottomMenu"
   >
-    Bottom bar
+    <div>
+      Count:
+      0
+    </div>
+    <ul
+      className="filter-nav"
+    >
+      <li
+        className="filter-nav-entry"
+      >
+        <button>
+          All
+        </button>
+      </li>
+      <li
+        className="filter-nav-entry"
+      >
+        <button>
+          Active
+        </button>
+      </li>
+      <li
+        className="filter-nav-entry"
+      >
+        <button>
+          Completed
+        </button>
+      </li>
+    </ul>
   </div>
 </div>
 `;

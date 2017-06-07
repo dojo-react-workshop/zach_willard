@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
-
+import AddTodo from './AddTodo';
+import Todo from './Todo';
+import BottomMenu from './BottomMenu';
 
 
 
@@ -9,7 +10,10 @@ class App extends Component {
   state = {
     todoItems: [],
     addToDo: "",
-    styles: { standard: 'columns small-8 medium-6 large-4 xlarge-4 small-centered', card: 'card' }
+    styles: { standard: 'columns small-10 medium-8 large-6 xlarge-4 small-centered', card: 'card' },
+    completedCount: 0,
+    nextId: 0,
+    filter: "All"
   }
 
   standard = "";
@@ -18,8 +22,8 @@ class App extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     let tempItems = this.state.todoItems.slice();
-    tempItems.push({ name: this.state.addToDo, id: this.state.todoItems.length, completed: false });
-    this.setState({ todoItems: tempItems, addToDo: "" });
+    tempItems.push({ name: this.state.addToDo, id: this.state.nextId, completed: false });
+    this.setState({ todoItems: tempItems, addToDo: "", nextId: this.state.nextId + 1 });
   }
 
   handleChange = (event) => {
@@ -27,58 +31,87 @@ class App extends Component {
   }
 
   toggleComplete = (id) => {
-    let items = this.state.todoItems.slice();
-    console.log(items);
-    (items[id].completed) ? items[id].completed = false : items[id].completed = true;
-    this.setState({ todoItems: items });
+    let todoItems = this.state.todoItems.slice();
+    let completedCount = this.state.completedCount
+
+    //If id is undefined, that means the "down arrow" was clicked and we want to mark all items complete.
+    if (id === undefined) {
+      if (completedCount === todoItems.length){
+        // if all items are completed, mark them not-completed
+        todoItems.forEach((item) => {
+                  item.completed = false;
+                  completedCount--;
+                });
+      } else {
+        // mark only the non-true items as complete
+        todoItems.forEach((item) => {
+          if (!item.completed){
+            item.completed = true;
+            completedCount++;
+          }
+        })
+      }
+    } else {
+      //Individually checked
+      if (todoItems[id].completed) {
+        todoItems[id].completed = false
+        completedCount--;
+      } else {
+        todoItems[id].completed = true;
+        completedCount++;
+      }
+    }
+    this.setState({ completedCount })
+    this.setState({ todoItems });
+  }
+
+  setFilter = (filter) => {
+    this.setState({ filter });
+  }
+
+  clearCompleted = () => {
+    let todoItems = []
+    todoItems = this.state.todoItems.filter((item) => { return (!item.completed) });
+    this.setState({ todoItems, completedCount : 0});
   }
 
   render() {
     return (
       <div className="App row">
         <h1 className={this.state.styles.standard}>Todos</h1>
-        <DeleteAddTodo css={this.state.styles} handleSubmit={this.handleSubmit} handleChange={this.handleChange} addToDo={this.state.addToDo} />
-        {this.state.todoItems.map((item) => <Todo css={this.state.styles} item={item} toggleComplete={this.toggleComplete} key={item.id}/> )}
-        <BottomMenu css={this.state.styles} />
+        <AddTodo 
+          css={this.state.styles} 
+          handleSubmit={this.handleSubmit} 
+          handleChange={this.handleChange} 
+          addToDo={this.state.addToDo} 
+          toggleComplete={this.toggleComplete}/>
+        {          
+            this.state.todoItems.filter((item) => {
+              if (this.state.filter === "Active"){
+                return (item.completed === false)
+              } else if (this.state.filter === "Completed") {
+                return (item.completed === true)
+              } else {
+                return true;
+              }
+              }).map((item, idx) => <Todo css={this.state.styles} 
+                                                      item={item}
+                                                      idx={idx}
+                                                      toggleComplete={this.toggleComplete} 
+                                                      key={item.id}
+                                                      /> )
+        }
+        {this.state.todoItems.length > 0 ? 
+          <BottomMenu css={this.state.styles} 
+                      itemsLeft={this.state.todoItems.length - this.state.completedCount} 
+                      completedCount={this.state.completedCount}
+                      filter={this.state.filter}
+                      setFilter={this.setFilter}
+                      clearCompleted={this.clearCompleted}/> 
+                      : null}
       </div>
     );
   }
-}
-
-const DeleteAddTodo = ({ css, addToDo, handleChange, handleSubmit }) => {
-  const { standard, card } = css;
-
-  return (
-    <div className={standard+" "+card}>
-      <a><span className="icon icon-caret-down"></span></a>
-      <form onSubmit={handleSubmit}><input type="text" value={addToDo} onChange={handleChange} placeholder="What needs to be done?"/></form>
-    </div>
-  )  
-}
-
-const Todo = ({ toggleComplete, item, css }) => {
-  const { id, completed, name } = item;
-  const { standard, card } = css;
-
-  const handleClick = () => {
-    toggleComplete(id);
-  }
-  
-  return (
-      <div className={standard+" "+card+" Todo"}>
-        <div className="Checkcircle" onClick={handleClick}>
-          {(completed) ? <span className="icon icon-check"></span> : null}
-        </div>
-        {(completed) ? <div className="todoname crossed">{name}</div> : <div className="todoname">{name}</div>}
-      </div>
-  )
-}
-
-const BottomMenu = ({ css }) => {
-  const { standard, card } = css;
-  return (
-    <div className={standard+" "+card}>Bottom bar</div>
-  )
 }
 
 export default App;
